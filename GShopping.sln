@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{FE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShopping.Web", "FrontEnd\GShopping.Web\GShopping.Web.csproj", "{E7FC23EB-51C3-4E35-B83A-49E49034FED7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GShopping.API", "Services\GShopping.API\GShopping.API.csproj", "{F20E9B22-21C7-4923-B405-1C5E2E43875C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GShopping.API", "Services\GShopping.API\GShopping.API.csproj", "{F20E9B22-21C7-4923-B405-1C5E2E43875C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GShopping.IdentityServer", "Services\GShopping.IdentityServer\GShopping.IdentityServer.csproj", "{4436CB04-4846-49FF-B794-E00CCEEC061A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{F20E9B22-21C7-4923-B405-1C5E2E43875C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F20E9B22-21C7-4923-B405-1C5E2E43875C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F20E9B22-21C7-4923-B405-1C5E2E43875C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4436CB04-4846-49FF-B794-E00CCEEC061A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4436CB04-4846-49FF-B794-E00CCEEC061A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4436CB04-4846-49FF-B794-E00CCEEC061A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4436CB04-4846-49FF-B794-E00CCEEC061A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E7FC23EB-51C3-4E35-B83A-49E49034FED7} = {D5BAD6E6-730C-4ECE-9119-D473CFD61CE4}
 		{F20E9B22-21C7-4923-B405-1C5E2E43875C} = {FEA4DF68-5A27-4B6D-872B-9B3306C1C553}
+		{4436CB04-4846-49FF-B794-E00CCEEC061A} = {FEA4DF68-5A27-4B6D-872B-9B3306C1C553}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB63D0B5-7E4A-4C54-9D6F-B0F311FC9615}
