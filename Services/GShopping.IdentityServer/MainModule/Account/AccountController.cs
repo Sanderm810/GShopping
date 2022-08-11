@@ -18,10 +18,10 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
-using GeekShopping.IdentityServer.MainModule.Account;
 using System.Collections.Generic;
 using System.Security.Claims;
 using GShopping.IdentityServer.Model;
+using GShopping.IdentityServer.MainModule.Account;
 
 namespace IdentityServerHost.Quickstart.UI
 {

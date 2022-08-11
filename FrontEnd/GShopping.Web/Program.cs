@@ -1,5 +1,6 @@
 using GShopping.Web.Services;
 using GShopping.Web.Services.IServices;
+using Microsoft.AspNetCore.Authentication;
 
 namespace GShopping.Web
 {
@@ -17,6 +18,27 @@ namespace GShopping.Web
 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies", c =>  c.ExpireTimeSpan = TimeSpan.FromMinutes(10))
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority = builder.Configuration["ServicesUrls:IdentityServer"];
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ClientId = "g_shopping";
+                options.ClientSecret = "g_shopping_secret";
+                options.ResponseType = "code";
+                options.ClaimActions.MapJsonKey("role", "role", "role");
+                options.ClaimActions.MapJsonKey("sub", "sub", "sub");
+                options.TokenValidationParameters.NameClaimType = "name";
+                options.TokenValidationParameters.RoleClaimType = "role";
+                options.Scope.Add("g_shopping");
+                options.SaveTokens = true;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,6 +52,8 @@ namespace GShopping.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -1,7 +1,9 @@
+using Duende.IdentityServer.Services;
 using GShopping.IdentityServer.Configuration;
 using GShopping.IdentityServer.Initializer;
 using GShopping.IdentityServer.Model;
 using GShopping.IdentityServer.Model.Context;
+using GShopping.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +38,7 @@ namespace GShopping.IdentityServer
                     .AddAspNetIdentity<ApplicationUser>();
 
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-            //builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
 
             builderOption.AddDeveloperSigningCredential();
 
@@ -59,6 +61,12 @@ namespace GShopping.IdentityServer
             app.UseIdentityServer();
 
             app.UseAuthorization();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                IDbInitializer initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                initializer.Initialize();
+            }
 
             app.MapControllerRoute(
                 name: "default",

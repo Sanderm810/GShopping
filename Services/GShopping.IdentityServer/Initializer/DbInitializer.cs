@@ -31,14 +31,14 @@ namespace GShopping.IdentityServer.Initializer
             ApplicationUser admin = new ApplicationUser()
             {
                 UserName = "sander-admin",
-                Email = "sanderm810@gmail.com",
+                Email = "sander_admin@gmail.com",
                 EmailConfirmed = true,
                 PhoneNumber = "+55 (48) 99840-8665",
                 FirstName = "Sander",
                 LastName = "Admin"
             };
 
-            _user.CreateAsync(admin, "Admin@@").GetAwaiter().GetResult();
+            _user.CreateAsync(admin, "Admin123$$").GetAwaiter().GetResult();
             _user.AddToRoleAsync(admin, IdentityConfiguration.Admin).GetAwaiter().GetResult();
 
             var adminClaims = _user.AddClaimsAsync(admin, new Claim[]
@@ -52,14 +52,14 @@ namespace GShopping.IdentityServer.Initializer
             ApplicationUser client = new ApplicationUser()
             {
                 UserName = "sander-client",
-                Email = "sanderm810@gmail.com",
+                Email = "sander_client@gmail.com",
                 EmailConfirmed = true,
                 PhoneNumber = "+55 (48) 99840-8665",
                 FirstName = "Sander",
                 LastName = "Client"
             };
 
-            _user.CreateAsync(client, "Client@@").GetAwaiter().GetResult();
+            _user.CreateAsync(client, "Client123$$").GetAwaiter().GetResult();
             _user.AddToRoleAsync(client, IdentityConfiguration.Client).GetAwaiter().GetResult();
 
             var clientClaims = _user.AddClaimsAsync(client, new Claim[]

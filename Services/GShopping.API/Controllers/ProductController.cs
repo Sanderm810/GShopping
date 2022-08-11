@@ -1,5 +1,7 @@
 ﻿using GShopping.API.Data.ValueObjects;
 using GShopping.API.Repository;
+using GShopping.API.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,7 @@ namespace GShopping.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ProductVO>> FindById(long id)
         {
             var product = await _repository.findById(id);
@@ -26,6 +29,7 @@ namespace GShopping.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductVO>>> FindAll()
         {
             var products = await _repository.findAll();
@@ -33,6 +37,7 @@ namespace GShopping.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ProductVO>> Create([FromBody] ProductVO vo)
         {
             if (vo == null) return BadRequest();
@@ -41,6 +46,7 @@ namespace GShopping.API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult<ProductVO>> Update([FromBody] ProductVO vo)
         {
             if (vo == null) return BadRequest();
@@ -49,6 +55,7 @@ namespace GShopping.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<ActionResult> Delete(long id)
         {
             var status = await _repository.Delete(id);

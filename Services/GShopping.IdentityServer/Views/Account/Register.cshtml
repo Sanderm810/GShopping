@@ -1,4 +1,4 @@
-﻿@model GeekShopping.IdentityServer.MainModule.Account.RegisterViewModel
+﻿@model GShopping.IdentityServer.MainModule.Account.RegisterViewModel
 
 <div class="login-page">
     <div class="lead">
@@ -21,29 +21,30 @@
                         <input type="hidden" asp-for="ReturnUrl" />
 
                         <div class="form-group">
-                            <label asp-for="Username"></label>
-                            <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                            <label asp-for="Username">Usuário</label>
+                            <input class="form-control" placeholder="nome do usuário" asp-for="Username" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Email"></label>
+                            <label asp-for="Email">Email</label>
                             <input class="form-control" placeholder="email" asp-for="Email" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="FirstName"></label>
-                            <input class="form-control" placeholder="first name" asp-for="FirstName" autofocus>
+                            <label asp-for="FirstName">Nome</label>
+                            <input class="form-control" placeholder="nome" asp-for="FirstName" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="LastName"></label>
-                            <input class="form-control" placeholder="lastname" asp-for="LastName" autofocus>
+                            <label asp-for="LastName">Sobrenome</label>
+                            <input class="form-control" placeholder="sobrenome" asp-for="LastName" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Password"></label>
-                            <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            <label asp-for="Password">Senha</label>
+                            <input type="password" class="form-control" placeholder="senha" asp-for="Password" autocomplete="off">
                         </div>
                         <div class="form-group">
-                            <label asp-for="RoleName"></label>
-                            <select asp-for="RoleName" class="form-control" asp-items="@(new SelectList(ViewBag.message))"></select>
+                            <label asp-for="RoleName" ></label>
+                            <select asp-for="RoleName" class="form-control"  asp-items="@(new SelectList(ViewBag.message))"></select>
                         </div>
+                        <br/>
                         <button class="btn btn-primary" name="button" value="Register">Register</button>
                         <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
                     </form>
