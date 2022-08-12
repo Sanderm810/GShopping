@@ -1,4 +1,7 @@
-﻿namespace GShopping.Web.Models
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+
+namespace GShopping.Web.Models
 {
     public class ProductModel
     {
@@ -8,6 +11,9 @@
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public string ImageUrl { get; set; }
+
+        [Range(1, 100)]
+        public int Count { get; set; } = 1;
 
         public string SubstringName()
         {

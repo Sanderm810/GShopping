@@ -1,4 +1,16 @@
 ﻿@model IEnumerable<ProductModel>
+
+@{
+    <script>
+        function chageimage(id)
+        {
+            document.getElementById("image" + id).setAttribute("src", "/images/no_image.jpg");
+        };
+    </script>
+
+    string getId(long id) => $"image{id}";
+}
+
 <form>
     <div class="container row">
         @foreach (var product in Model)
@@ -6,7 +18,7 @@
             <div class="col-4">
                 <div class="p-0 my-3 border">
                     <div class="card">
-                        <img src="@product.ImageUrl" class="card-img-top"/>
+                        <img id="@getId(product.Id)" src="@product.ImageUrl" onerror="chageimage(@product.Id)" class="card-img-top"/>
                         <div class="card-body">
                             <h3 class="card-title text-success">@product.SubstringName()</h3>
                             <span class="badge badge-light mb-2">@product.CategoryName</span>
