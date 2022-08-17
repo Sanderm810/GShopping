@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GShopping.Web.Models
 {
-    public class ProductModel
+    public class ProductViewModel
     {
         public long Id { get; set; }
         public string Name { get; set; }
