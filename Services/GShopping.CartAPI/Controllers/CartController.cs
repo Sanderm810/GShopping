@@ -1,4 +1,6 @@
 using GShopping.CartAPI.Data.ValueObjects;
+using GShopping.CartAPI.Messages;
+using GShopping.CartAPI.RabbitMQSender;
 using GShopping.CartAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +11,12 @@ namespace GShopping.CartAPI.Controllers
     public class CartController : ControllerBase
     {
         private ICartRepository _repository;
+        private IRabbitMQMessageSender _rabbitMQMessageSender;
 
-        public CartController(ICartRepository repository)
+        public CartController(ICartRepository repository, IRabbitMQMessageSender rabbitMQMessageSender)
         {
-            _repository = repository ?? throw new
-                ArgumentNullException(nameof(repository));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _rabbitMQMessageSender = rabbitMQMessageSender ?? throw new ArgumentNullException(nameof(rabbitMQMessageSender));
         }
 
         [HttpGet("find-cart/{id}")]
@@ -46,6 +49,23 @@ namespace GShopping.CartAPI.Controllers
             var status = await _repository.RemoveFromCart(id);
             if (!status) return BadRequest();
             return Ok(status);
+        }
+
+        [HttpPost("checkout")]
+        public async Task<ActionResult<CheckoutHeaderVO>> Checkout(CheckoutHeaderVO vo)
+        {
+            if (vo?.UserId == null) return BadRequest();
+            var cart = await _repository.FindCartByUserId(vo.UserId);
+            if (cart == null) return NotFound();
+            vo.CartDetails = cart.CartDetails;
+            vo.DateTime = DateTime.Now;
+
+            // RabbitMQ logic comes here!
+            _rabbitMQMessageSender.SendMessage(vo, "checkoutqueue");
+
+            await _repository.ClearCart(vo.UserId);
+
+            return Ok(vo);
         }
     }
 }

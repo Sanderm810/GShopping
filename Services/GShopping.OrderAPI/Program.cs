@@ -1,8 +1,8 @@
-using AutoMapper;
-using GShopping.CartAPI.Config;
-using GShopping.CartAPI.Model.Context;
-using GShopping.CartAPI.RabbitMQSender;
-using GShopping.CartAPI.Repository;
+using GeekShopping.OrderAPI.RabbitMQSender;
+using GShopping.OrderAPI.MessageConsumer;
+using GShopping.OrderAPI.Model.Context;
+using GShopping.OrderAPI.RabbitMQSender;
+using GShopping.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -15,12 +15,17 @@ var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 
 builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 30))));
 
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ICartRepository, CartRepository>();
+var builderOptions = new DbContextOptionsBuilder<MySQLContext>();
+
+builderOptions.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 30)));
+
+builder.Services.AddSingleton(new OrderRepository(builderOptions.Options));
 
 builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
+
+//builder.Services.AddScoped<ICartRepository, CartRepository>();
+
+builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
 
 builder.Services.AddControllers();
 
@@ -48,7 +53,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GShopping Card", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GShopping Order", Version = "v1" });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -76,6 +81,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
