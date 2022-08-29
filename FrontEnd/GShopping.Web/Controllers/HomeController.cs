@@ -23,6 +23,11 @@ namespace GShopping.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _productService.FindAllProducts("");
+            var UserID = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
+            if (UserID != null)
+            {
+                ViewData["BadgeCount"] = await CountCart();
+            }
             return View(products);
         }
 
@@ -31,6 +36,7 @@ namespace GShopping.Web.Controllers
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             var model = await _productService.FindProductById(id, token);
+            ViewData["BadgeCount"] = await CountCart();
             return View(model);
         }
 
@@ -65,6 +71,7 @@ namespace GShopping.Web.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 
@@ -89,6 +96,25 @@ namespace GShopping.Web.Controllers
         public IActionResult Logout()
         {
             return SignOut("Cookies", "oidc");
+        }
+
+        private async Task<int> CountCart()
+        {
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value;
+
+            var response = await _cartService.FindCartByUserId(userId, token);
+
+            var count = 0;
+
+            if (response?.CartHeader != null)
+            {
+                foreach (var detail in response.CartDetails)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }

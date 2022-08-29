@@ -19,5 +19,7 @@ namespace GShopping.OrderAPI.Messages
         public string? ExpiryMothYear { get; set; }
         public int? CartTotalItems { get; set; }
         public IEnumerable<CartDetailVO>? CartDetails { get; set; }
+
+        public string? Status { get; set; } = "Processando";
     }
 }

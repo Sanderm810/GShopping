@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var Count = @Url.Action("CountCart", "HomeController");
+    var res = Count;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,10 +35,21 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="ProductIndex">Produtos</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="OrderIndex">Pedidos</a>
+                            </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="CartIndex">
-                                <i class="fas fa-shopping-cart"></i>
+                                <i class="fas fa-shopping-cart">
+                                    @if(ViewData["BadgeCount"] != null)
+                                    {   
+                                        <span class="top-0 start-100 translate-middle badge rounded-pill bg-danger"  style="margin-left: 5px">
+                                            @ViewData["BadgeCount"]
+                                            @*<span class="visually-hidden" >3</span>*@
+                                        </span>
+                                    }
+                                </i>
                             </a>
                         </li>
                     </ul>

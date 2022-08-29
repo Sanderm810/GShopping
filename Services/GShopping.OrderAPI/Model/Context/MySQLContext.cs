@@ -8,5 +8,6 @@ namespace GShopping.OrderAPI.Model.Context
 
         public DbSet<OrderDetail> Details { get; set; }
         public DbSet<OrderHeader> Headers { get; set; }
+        public DbSet<OrderProduct> Product { get; set; }
     }
 }

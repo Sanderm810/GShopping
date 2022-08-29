@@ -72,12 +72,22 @@ namespace GShopping.OrderAPI.MessageConsumer
 
             foreach (var details in vo.CartDetails)
             {
+                OrderProduct product = new()
+                {
+                    Id = details.Product.Id,
+                    Description = details.Product.Description,
+                    ImageUrl = details.Product.ImageUrl,
+                    Name = details.Product.Name,
+                    CategoryName = details.Product.CategoryName,
+                    Price = details.Product.Price
+                };
                 OrderDetail detail = new()
                 {
-                    ProductId = details.ProductId,
+                    OrderProductId = details.ProductId,
                     ProductName = details.Product.Name,
                     Price = details.Product.Price,
                     Count = details.Count,
+                    OrderProduct = product
                 };
                 order.CartTotalItems += details.Count;
                 order.OrderDetails.Add(detail);

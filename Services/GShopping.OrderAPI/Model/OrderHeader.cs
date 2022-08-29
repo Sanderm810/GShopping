@@ -53,5 +53,8 @@ namespace GShopping.OrderAPI.Model
 
         [Column("payment_status")]
         public bool? PaymentStatus { get; set; }
+
+        [Column("status")]
+        public string? Status { get; set; }
     }
 }

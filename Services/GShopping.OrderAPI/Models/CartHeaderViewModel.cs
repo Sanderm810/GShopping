@@ -1,4 +1,4 @@
-﻿namespace GShopping.Web.Models
+﻿namespace GShopping.OrderAPI.Models
 {
     public class CartHeaderViewModel 
     {
@@ -18,5 +18,6 @@
         public string CardNumber { get; set; }
         public string CVV { get; set; }
         public string ExpiryMothYear { get; set; }
+        public string Status { get; set; }
     }
 }

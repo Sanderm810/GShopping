@@ -23,7 +23,7 @@ builder.Services.AddSingleton(new OrderRepository(builderOptions.Options));
 
 builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
-//builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
 
@@ -80,11 +80,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

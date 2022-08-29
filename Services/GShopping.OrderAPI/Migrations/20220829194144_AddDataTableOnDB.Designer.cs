@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GShopping.OrderAPI.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    [Migration("20220819181051_AddOrderDataTablesOnDB")]
-    partial class AddOrderDataTablesOnDB
+    [Migration("20220829194144_AddDataTableOnDB")]
+    partial class AddDataTableOnDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,13 +35,12 @@ namespace GShopping.OrderAPI.Migrations
                     b.Property<long>("OrderHeaderId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("OrderProductId")
+                        .HasColumnType("bigint");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)")
                         .HasColumnName("price");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("product_id");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -51,6 +50,8 @@ namespace GShopping.OrderAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderHeaderId");
+
+                    b.HasIndex("OrderProductId");
 
                     b.ToTable("order_detail");
                 });
@@ -122,6 +123,10 @@ namespace GShopping.OrderAPI.Migrations
                         .HasColumnType("decimal(65,30)")
                         .HasColumnName("purchase_amount");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext")
+                        .HasColumnName("status");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -132,20 +137,72 @@ namespace GShopping.OrderAPI.Migrations
                     b.ToTable("order_header");
                 });
 
+            modelBuilder.Entity("GShopping.OrderAPI.Model.OrderProduct", b =>
+                {
+                    b.Property<long>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("key");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Category_name");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("Description");
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("image_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("name");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)")
+                        .HasColumnName("price");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("order_product");
+                });
+
             modelBuilder.Entity("GShopping.OrderAPI.Model.OrderDetail", b =>
                 {
                     b.HasOne("GShopping.OrderAPI.Model.OrderHeader", "OrderHeader")
-                        .WithMany("CartDetails")
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GShopping.OrderAPI.Model.OrderProduct", "OrderProduct")
+                        .WithMany()
+                        .HasForeignKey("OrderProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("OrderHeader");
+
+                    b.Navigation("OrderProduct");
                 });
 
             modelBuilder.Entity("GShopping.OrderAPI.Model.OrderHeader", b =>
                 {
-                    b.Navigation("CartDetails");
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

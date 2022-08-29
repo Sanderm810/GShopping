@@ -1,4 +1,6 @@
-﻿using GShopping.EmailAPI.Messages;
+﻿using GShopping.EmailAPI.Email;
+using GShopping.EmailAPI.Messages;
+using GShopping.EmailAPI.Model;
 using GShopping.EmailAPI.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,10 +12,11 @@ namespace GShopping.EmailAPI.MessageConsumer
     public class RabbitMQCheckoutConsumer : BackgroundService
     {
         private readonly EmailRepository _repository;
+        private readonly IMailService mailService;
         private IConnection _connection;
         private IModel _channel;
 
-        public RabbitMQCheckoutConsumer(EmailRepository repository)
+        public RabbitMQCheckoutConsumer(EmailRepository repository, IMailService mailService)
         {
             _repository = repository;
             var factory = new ConnectionFactory
@@ -27,6 +30,8 @@ namespace GShopping.EmailAPI.MessageConsumer
             _channel = _connection.CreateModel();
 
             _channel.QueueDeclare(queue: "emailqueue", false, false, false, arguments: null);
+
+            this.mailService = mailService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -55,6 +60,19 @@ namespace GShopping.EmailAPI.MessageConsumer
                 //Log
                 throw;
             }
+
+            //Email = message.Email,
+            //    SendDate = DateTime.Now,
+            //    Log = $"Pedido - {message.OrderId} foi criada com sucesso!",
+            //    OrderId = message.OrderId
+
+            MailRequest mailRequest = new MailRequest()
+            {
+                ToEmail = message.Email,
+                Subject = $"Pedido - {message.Id}",
+                Body = $"<h1>Pedido - {message.Id} </h1>"
+            };
+            await this.mailService.SendEmailAsync(mailRequest);
         }
     }
 }

@@ -22,8 +22,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Integration\GShopping.MessageBus\GShopping.MessageBus.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 </Project>

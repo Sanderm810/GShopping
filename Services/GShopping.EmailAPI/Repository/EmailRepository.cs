@@ -20,8 +20,8 @@ namespace GShopping.EmailAPI.Repository
             {
                 Email = message.Email,
                 SendDate = DateTime.Now,
-                Log = $"Pedido - {message.OrderId} foi criada com sucesso!",
-                OrderId = message.OrderId
+                Log = $"Pedido - {message.Id} foi criada com sucesso!",
+                OrderId = message.Id
             };
             await using var _db = new MySQLContext(_context);
             _db.Emails.Add(email);
