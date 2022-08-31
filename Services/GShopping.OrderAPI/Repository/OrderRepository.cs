@@ -75,8 +75,19 @@ namespace GShopping.OrderAPI.Repository
                     {
                         return new CartDetailViewModel
                         {
+                            Id = item.Id,
                             Count = item.Count,
-                            CartHeaderId = header.Id
+                            CartHeaderId = header.Id,
+                            Product = new ProductViewModel
+                            {
+                                CategoryName = item.OrderProduct.CategoryName,
+                                Count = item.Count,
+                                Description = item.OrderProduct.Description,
+                                Id = item.OrderProduct.Id,
+                                ImageUrl = item.OrderProduct.ImageUrl,
+                                Name = item.OrderProduct.Name,
+                                Price = item.OrderProduct.Price
+                            }
                         };
                     }).ToList()
                 });
@@ -84,9 +95,58 @@ namespace GShopping.OrderAPI.Repository
             return ordersView;
         }
 
-        public Task<OrderHeader> FindOrderById(long id)
+        public async Task<OrderViewModel> FindOrderById(long id)
         {
-            throw new NotImplementedException();
+            await using var _db = new MySQLContext(_context);
+
+            OrderHeader ordersHeader = await _db.Headers
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+
+            List<OrderDetail> ordersDetails = await _db.Details
+                    .Where(x => x.OrderHeader.Id == ordersHeader.Id)
+                    .Include(c => c.OrderProduct)
+                    .ToListAsync();
+
+            return new OrderViewModel
+            {
+                CartHeader = new CartHeaderViewModel
+                {
+                    Id = ordersHeader.Id,
+                    CardNumber = ordersHeader.CardNumber,
+                    Count = ordersDetails.Count,
+                    CouponCode = ordersHeader.CouponCode,
+                    CVV = ordersHeader.CVV,
+                    DateTime = ordersHeader.DateTime,
+                    DiscountAmount = (decimal)ordersHeader.DiscountAmount,
+                    Email = ordersHeader.Email,
+                    ExpiryMothYear = ordersHeader.ExpiryMonthYear,
+                    FirstName = ordersHeader.FirstName,
+                    LastName = ordersHeader.LastName,
+                    Phone = ordersHeader.Phone,
+                    PurchaseAmount = ordersHeader.PurchaseAmount,
+                    Status = ordersHeader.Status,
+                    UserId = ordersHeader.UserId
+                },
+                CartDetails = ordersDetails.Select(item =>
+                {
+                    return new CartDetailViewModel
+                    {
+                        Count = item.Count,
+                        CartHeaderId = ordersHeader.Id,
+                        Product = new ProductViewModel
+                        {
+                            CategoryName = item.OrderProduct.CategoryName,
+                            Count = item.Count,
+                            Description = item.OrderProduct.Description,
+                            Id = item.OrderProduct.Id,
+                            ImageUrl = item.OrderProduct.ImageUrl,
+                            Name = item.OrderProduct.Name,
+                            Price = item.OrderProduct.Price
+                        }
+                    };
+                }).ToList()
+            };
         }
 
         public Task<OrderHeader> SendEmail(OrderHeader model)

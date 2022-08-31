@@ -1,9 +1,9 @@
-﻿using GShopping.EmailAPI.Model;
+﻿using GShopping.EmailAPI.Messages;
 
 namespace GShopping.EmailAPI.Email
 {
     public interface IMailService
     {
-        Task SendEmailAsync(MailRequest mailRequest);
+        Task SendEmailAsync(CheckoutMessage message);
     }
 }

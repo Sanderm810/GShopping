@@ -19,6 +19,9 @@ namespace GShopping.Web
 
             builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
                c.BaseAddress = new Uri(builder.Configuration["ServicesUrls:OrderAPI"]));
+            
+            builder.Services.AddHttpClient<IEmailService, EmailService>(c =>
+               c.BaseAddress = new Uri(builder.Configuration["ServicesUrls:EmailAPI"]));
 
             builder.Services.AddControllersWithViews();
 

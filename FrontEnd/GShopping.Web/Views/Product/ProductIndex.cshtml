@@ -1,5 +1,16 @@
 ﻿@model IEnumerable<ProductViewModel>
 
+@{
+    <script>
+        function chageimage(id)
+        {
+            document.getElementById("image" + id).setAttribute("src", "/images/no_image.jpg");
+        };
+    </script>
+
+    string getId(long id) => $"image{id}";
+}
+    
 <br/>
 <br/>
 <div class="container p-4 border">
@@ -17,6 +28,9 @@
         <thead>
             <tr>
                 <th>
+                    Imagem
+                </th> 
+                <th>
                     Nome
                 </th>
                  <th>
@@ -32,6 +46,9 @@
             {
                 <tr>
                     <td>
+                        <img id="@getId(item.Id)" src="@item.ImageUrl" style="border-radius: 35px;" onerror="chageimage(@item.Id)" width="60px" class="rounded"/>
+                    </td>
+                    <td>
                         @item.Name
                     </td>
                     <td>
@@ -40,7 +57,7 @@
                     <td>
                         @((item.Price).ToString("c"))
                     </td>
-                    <td>
+                    <td style="text-align: end;">
                         <a asp-action="ProductUpdate" class="btn btn-success" asp-route-id="@item.Id">
                             <i class="fas fa-edit"></i>
                         </a>

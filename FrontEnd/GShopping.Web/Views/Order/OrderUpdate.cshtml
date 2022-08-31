@@ -1,0 +1,179 @@
+﻿@model OrderViewModel
+
+@{
+    <script>
+        function chageimage(id)
+        {
+            document.getElementById("image-" + id).setAttribute("src", "/images/no_image.jpg");
+        };
+        function hiddenItem(id)
+        {
+            document.getElementById("item-" + id).setAttribute("hidden", "true");
+        };
+    </script>
+
+    string getIdImage(long id) => $"image-{id}";
+    string getIdItem(long id) => $"item-{id}";
+}
+
+<form asp-action="OrderUpdate">
+    <input asp-for="CartHeader.Id" hidden />
+    <br/>
+    <div class="container border p-3">
+        <h1 class="text-primary">Editar Pedido</h1>
+        
+        <hr/>
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+             <div class="col-2">
+                <label asp-for="CartHeader.DateTime" class="control-label pt-2" style="font-size:20px;">Emissão</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input value="@Model.CartHeader.DateFomart()" readonly class="form-control"/>
+            </div>
+            <div class="col-2">
+                <label asp-for="CartHeader.FirstName" class="control-label pt-2" style="font-size:20px;">Nome</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CartHeader.FirstName" class="form-control"/>
+                <span asp-validation-for="CartHeader.FirstName" class="text-danger"/>
+            </div>
+            <div class="col-2">
+                <label asp-for="CartHeader.LastName" class="control-label pt-2" style="font-size:20px;">Sobrenome</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CartHeader.LastName" class="form-control" />
+                <span asp-validation-for="CartHeader.LastName" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="CartHeader.Phone" class="control-label pt-2" style="font-size:20px;">Telefone</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CartHeader.Phone" class="form-control" rows="5"></input>
+                <span asp-validation-for="CartHeader.Phone" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="CartHeader.Email" class="control-label pt-2" style="font-size:20px;">Email</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CartHeader.Email" class="form-control" />
+                <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="CartHeader.Status" class="control-label pt-2" style="font-size:20px;">Status</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="CartHeader.Status" class="form-control" />
+                <span asp-validation-for="CartHeader.Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 pb-3">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="d-none d-lg-block">
+                            <div class="row text-primary">
+                                <div class="col-2">
+                                    Imagem
+                                </div>
+                                <div class="col-3">
+                                    Nome
+                                </div>
+                                <div class="col-2">
+                                    Preço
+                                </div>
+                                <div class="col-3">
+                                    Quantidade
+                                </div>
+                                <div class="col-2">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        @if(@Model.CartDetails != null){
+
+                            @for (int i = 0; i < Model.CartDetails.Count(); i++)
+                            {
+
+                                <input asp-for="@Model.CartDetails[i].Id" hidden />
+                                <input asp-for="@Model.CartDetails[i].Product.Id" hidden />
+                                 <div id="@getIdItem(@Model.CartDetails[i].Product.Id)">
+                                    <div class="row h-100">
+                                        <div class="col-2">
+                                            <img id="@getIdImage(@Model.CartDetails[i].Product.Id)" src="@Model.CartDetails[i].Product.ImageUrl" style="border-radius: 35px;" onerror="chageimage(@Model.CartDetails[i].Product.Id)" width="60px" class="rounded"/>
+                                        </div>
+                                        <div class="col-3">
+                                            <span style="font-size:20px;">@Model.CartDetails[i].Product.Name - @Model.CartDetails[i].Deleted</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <span style="font-size:17px;">@string.Format("{0:c}", @Model.CartDetails[i].Product.Price)</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <input asp-for="@Model.CartDetails[i].Count" class="form-control" />
+                                            <span asp-validation-for="@Model.CartDetails[i].Count" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-2" style="text-align: end;">
+                                            <a onclick="hiddenItem(@Model.CartDetails[i].Product.Id); @Model.CartDetails[i].Deleted = true;" class="btn btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                            }
+
+                          @*  @foreach (var item in @Model.CartDetails)
+                            {
+                                <div id="@getIdItem(item.Product.Id)">
+                                    <div class="row h-100">
+                                        <div class="col-2">
+                                            <img id="@getIdImage(item.Product.Id)" src="@item.Product.ImageUrl" style="border-radius: 35px;" onerror="chageimage(@item.Product.Id)" width="60px" class="rounded"/>
+                                        </div>
+                                        <div class="col-3">
+                                            <span style="font-size:20px;">@item.Product.Name - @item.Deleted</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <span style="font-size:17px;">@string.Format("{0:c}", item.Product.Price)</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <input asp-for="@item.Count" class="form-control" />
+                                            <span asp-validation-for="@item.Count" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-2" style="text-align: end;">
+                                            <a onclick="hiddenItem(@item.Product.Id); @item.Deleted = true;" class="btn btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                            }*@
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-right pr-4 text-danger">
+                Valor da compra: @string.Format("{0:c}", Model.CartHeader.PurchaseAmount)<br/>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="col-6">
+                <a asp-action="OrderIndex" class="btn-primary btn form-control ">Voltar para Lista</a>
+            </div>
+
+            <div class="col-6">
+                <input type="submit" value="Editar" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

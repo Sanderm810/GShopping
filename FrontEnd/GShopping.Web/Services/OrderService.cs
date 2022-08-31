@@ -16,16 +16,18 @@ namespace GShopping.Web.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<OrderViewModel>> FindAllOrders(string? token)
+        public async Task<IList<OrderViewModel>> FindAllOrders(string? token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var respose = await _client.GetAsync($"{BasePath}/all-orders");
             return await respose.ReadContentAs<List<OrderViewModel>>();
         }
 
-        public Task<OrderViewModel> FindOrderById(long id, string? token)
+        public async Task<OrderViewModel> FindOrderById(long id, string? token)
         {
-            throw new NotImplementedException();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var respose = await _client.GetAsync($"{BasePath}/find-order/{id}");
+            return await respose.ReadContentAs<OrderViewModel>();
         }
 
         public Task<OrderViewModel> UpdateOrder(OrderViewModel model, string? token)

@@ -19,7 +19,7 @@ namespace GShopping.OrderAPI.Controllers
 
         [HttpGet("find-order/{id}")]
         [Authorize]
-        public async Task<ActionResult<OrderHeader>> FindById(long id)
+        public async Task<ActionResult<OrderViewModel>> FindById(long id)
         {
             var order = await _repository.FindOrderById(id);
             if (order == null) return NotFound();

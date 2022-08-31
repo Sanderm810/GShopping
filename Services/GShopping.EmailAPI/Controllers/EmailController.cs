@@ -1,10 +1,10 @@
 ﻿using GShopping.EmailAPI.Email;
-using GShopping.EmailAPI.Model;
+using GShopping.EmailAPI.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GShopping.EmailAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class EmailController : Controller
     {
@@ -16,11 +16,11 @@ namespace GShopping.EmailAPI.Controllers
         }
 
         [HttpPost("Send")]
-        public async Task<IActionResult> Send([FromForm] MailRequest request)
+        public async Task<IActionResult> Send([FromBody] CheckoutMessage model)
         {
             try
             {
-                await mailService.SendEmailAsync(request);
+                await mailService.SendEmailAsync(model);
                 return Ok();
             }
             catch (Exception ex)

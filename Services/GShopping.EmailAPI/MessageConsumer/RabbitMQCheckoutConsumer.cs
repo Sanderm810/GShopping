@@ -66,13 +66,8 @@ namespace GShopping.EmailAPI.MessageConsumer
             //    Log = $"Pedido - {message.OrderId} foi criada com sucesso!",
             //    OrderId = message.OrderId
 
-            MailRequest mailRequest = new MailRequest()
-            {
-                ToEmail = message.Email,
-                Subject = $"Pedido - {message.Id}",
-                Body = $"<h1>Pedido - {message.Id} </h1>"
-            };
-            await this.mailService.SendEmailAsync(mailRequest);
+            
+             mailService.SendEmailAsync(message);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GShopping.EmailAPI.Model;
+﻿using GShopping.EmailAPI.Messages;
+using GShopping.EmailAPI.Model;
 using GShopping.EmailAPI.Utils;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -14,8 +15,21 @@ namespace GShopping.EmailAPI.Email
         {
             _mailSettings = mailSettings.Value;
         }
-        public async Task SendEmailAsync(MailRequest mailRequest)
+
+        private MailRequest ProcessMailRequest(CheckoutMessage message)
         {
+            return new MailRequest()
+            {
+                ToEmail = message.Email,
+                Subject = $"Pedido - {message.Id}",
+                Body = $"<h1>Pedido - {message.Id} </h1>"
+            };
+        }
+
+        public async Task SendEmailAsync(CheckoutMessage message)
+        {
+            MailRequest mailRequest = ProcessMailRequest(message);
+
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));

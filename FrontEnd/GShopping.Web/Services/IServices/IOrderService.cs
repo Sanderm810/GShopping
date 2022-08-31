@@ -4,7 +4,7 @@ namespace GShopping.Web.Services.IServices
 {
     public interface IOrderService
     {
-        Task<IEnumerable<OrderViewModel>> FindAllOrders(string? token);
+        Task<IList<OrderViewModel>> FindAllOrders(string? token);
         Task<OrderViewModel> FindOrderById(long id, string? token);
         Task<OrderViewModel> UpdateOrder(OrderViewModel model, string? token);
         Task<OrderViewModel> UpdateStatus(long id, string status, string? token);
