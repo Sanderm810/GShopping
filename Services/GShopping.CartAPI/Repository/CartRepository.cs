@@ -95,6 +95,19 @@ namespace GShopping.CartAPI.Repository
                 _context.Products.Add(cart.CartDetails.FirstOrDefault().Product);
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                product.Id = cart.CartDetails.FirstOrDefault().Product.Id;
+                product.Description = cart.CartDetails.FirstOrDefault().Product.Description;
+                product.CategoryName = cart.CartDetails.FirstOrDefault().Product.CategoryName;
+                product.Name = cart.CartDetails.FirstOrDefault().Product.Name;
+                product.ImageUrl = cart.CartDetails.FirstOrDefault().Product.ImageUrl;
+                product.Price = cart.CartDetails.FirstOrDefault().Product.Price;
+                
+                _context.Products.Update(product);
+
+                await _context.SaveChangesAsync();
+            }
 
             //Check if CartHeader is null
 

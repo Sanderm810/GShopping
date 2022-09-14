@@ -36,7 +36,7 @@ namespace GShopping.OrderAPI.Controllers
 
         [HttpPut("[action]")]
         [Authorize]
-        public async Task<ActionResult<OrderHeader>> Update([FromBody] OrderHeader vo)
+        public async Task<ActionResult<OrderViewModel>> Update([FromBody] OrderViewModel vo)
         {
             if (vo == null) return BadRequest();
             var order = await _repository.UpdateOrder(vo);

@@ -1,6 +1,8 @@
 using GShopping.Web.Services;
 using GShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace GShopping.Web
 {
@@ -47,6 +49,8 @@ namespace GShopping.Web
             });
 
             var app = builder.Build();
+
+            app.UseRequestLocalization("pt-BR");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

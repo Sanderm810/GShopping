@@ -16,7 +16,7 @@ namespace GShopping.OrderAPI.Repository
 
         public async Task<bool> AddOrder(OrderHeader header)
         {
-            if(header == null) return false;
+            if (header == null) return false;
             await using var _db = new MySQLContext(_context);
             _db.Headers.Add(header);
             await _db.SaveChangesAsync();
@@ -34,9 +34,39 @@ namespace GShopping.OrderAPI.Repository
             };
         }
 
-        public Task<bool> DeleteOrderById(long id)
+        public async Task<bool> DeleteOrderById(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await using var _db = new MySQLContext(_context);
+
+                OrderHeader header = await _db.Headers
+                   .Where(h => h.Id == id)
+                   .FirstOrDefaultAsync();
+
+                if (header == null) return false;
+
+                _db.Details
+                    .RemoveRange(
+                    _db.Details.Where(c => c.OrderHeaderId == header.Id));
+
+                _db.Product
+                    .RemoveRange(
+                    _db.Product.Where(c => _db.Details
+                    .Where(c => c.OrderHeaderId == header.Id)
+                    .Select(x => x.OrderProductId)
+                    .Contains(c.Key)
+                  ));
+
+                _db.Headers.Remove(header);
+
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<IEnumerable<OrderViewModel>> FindAllOrders()
@@ -68,8 +98,10 @@ namespace GShopping.OrderAPI.Repository
                         LastName = header.LastName,
                         Phone = header.Phone,
                         PurchaseAmount = header.PurchaseAmount,
-                        Status = header.Status,
-                        UserId = header.UserId
+                        Status = (Model.Enum.StatusPedido)header.Status,
+                        FullAddress = header.FullAddress,
+                        UserId = header.UserId,
+                        Observation = header.Observation
                     },
                     CartDetails = ordersDetails.Select(item =>
                     {
@@ -125,13 +157,16 @@ namespace GShopping.OrderAPI.Repository
                     LastName = ordersHeader.LastName,
                     Phone = ordersHeader.Phone,
                     PurchaseAmount = ordersHeader.PurchaseAmount,
-                    Status = ordersHeader.Status,
-                    UserId = ordersHeader.UserId
+                    Status = (Model.Enum.StatusPedido)ordersHeader.Status,
+                    FullAddress = ordersHeader.FullAddress,
+                    UserId = ordersHeader.UserId,
+                    Observation = ordersHeader.Observation
                 },
                 CartDetails = ordersDetails.Select(item =>
                 {
                     return new CartDetailViewModel
                     {
+                        Id = item.Id,
                         Count = item.Count,
                         CartHeaderId = ordersHeader.Id,
                         Product = new ProductViewModel
@@ -154,9 +189,51 @@ namespace GShopping.OrderAPI.Repository
             throw new NotImplementedException();
         }
 
-        public Task<OrderHeader> UpdateOrder(OrderHeader model)
+        public async Task<OrderViewModel> UpdateOrder(OrderViewModel model)
         {
-            throw new NotImplementedException();
+            await using var _db = new MySQLContext(_context);
+
+            OrderHeader ordersHeader = await _db.Headers
+                .Where(x => x.Id == model.CartHeader.Id)
+                .FirstOrDefaultAsync();
+
+            if (ordersHeader == null)
+            {
+                throw new Exception();
+            }
+
+            ordersHeader.FirstName = model.CartHeader.FirstName;
+            ordersHeader.LastName = model.CartHeader.LastName;
+            ordersHeader.Email = model.CartHeader.Email;
+            ordersHeader.Phone = model.CartHeader.Phone;
+            ordersHeader.Status = model.CartHeader.Status;
+            ordersHeader.FullAddress = model.CartHeader.FullAddress;
+            ordersHeader.Observation = model.CartHeader.Observation;
+            ordersHeader.PurchaseAmount = model.CartDetails.Select(x => (x.Product.Price * x.Count)).Sum();
+            ordersHeader.CartTotalItems = model.CartDetails.Select(x => x.Count).Sum();
+
+            List<OrderDetail> item = await _db.Details
+                   .Where(x => x.OrderHeaderId == ordersHeader.Id)
+                   .Include(c => c.OrderProduct)
+                   .ToListAsync();
+
+            item.ForEach(item =>
+            {
+                var modelItem = model.CartDetails.Where(x => x.Id == item.Id).FirstOrDefault();
+                if (modelItem != null)
+                {
+                    item.Count = modelItem.Count;
+                    if (item != null)
+                    {
+                        _db.Details.Update(item);
+                    }
+                }
+            });
+
+
+            await _db.SaveChangesAsync();
+
+            return await FindOrderById(ordersHeader.Id);
         }
 
         public Task UpdateOrderStatus(long orderHeaderId, string status)

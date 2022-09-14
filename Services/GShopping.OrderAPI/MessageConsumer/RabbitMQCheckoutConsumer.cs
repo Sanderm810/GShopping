@@ -67,7 +67,10 @@ namespace GShopping.OrderAPI.MessageConsumer
                 PurchaseAmount = vo.PurchaseAmount,
                 PaymentStatus = false,
                 Phone = vo.Phone,
-                DateTime = vo.DateTime
+                DateTime = vo.DateTime,
+                FullAddress = vo.FullAddress,
+                Status = vo.Status,
+                Observation = vo.Observation
             };
 
             foreach (var details in vo.CartDetails)

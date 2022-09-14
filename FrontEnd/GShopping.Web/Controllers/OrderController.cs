@@ -22,19 +22,18 @@ namespace GShopping.Web.Controllers
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             var orders = await _orderService.FindAllOrders(token);
-            if(message != null)
+            if (message != null)
             {
                 ViewData["AlertInfo"] = message;
             }
-            var view  = View(orders);
-            return view;
+            return View(orders);
         }
 
         public async Task<IActionResult> OrderUpdate(long id)
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             var model = await _orderService.FindOrderById(id, token);
-            if(model != null) return View(model);
+            if (model != null) return View(model);
             return NotFound();
         }
 
@@ -59,7 +58,17 @@ namespace GShopping.Web.Controllers
             if (model != null) return View(model);
             return NotFound();
         } 
-        
+
+        [HttpPost]
+        [Authorize(Roles = Role.Admin)]
+        public async Task<IActionResult> OrderDelete(OrderViewModel model)
+        {
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var response = await _orderService.DeleteOrderById(model.CartHeader.Id, token);
+            if (response) return RedirectToAction(nameof(OrderIndex));
+            return View(model);
+        }
+
         [Authorize]
         [ActionName("SendEmail")]
         public async Task<IActionResult> SendEmail(long id)
@@ -75,16 +84,6 @@ namespace GShopping.Web.Controllers
             {
                 return RedirectToAction(nameof(OrderIndex), new { message = "Problema ao tentar enviado email!" });
             }
-        }
-
-        [HttpPost]
-        [Authorize(Roles = Role.Admin)]
-        public async Task<IActionResult> OrderDelete(OrderViewModel model)
-        {
-            var token = await HttpContext.GetTokenAsync("access_token");
-            var response = await _orderService.DeleteOrderById(model.CartHeader.Id, token);
-            if (response) return RedirectToAction(nameof(OrderIndex));
-            return View(model);
         }
     }
 }

@@ -3,6 +3,7 @@ using GShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace GShopping.Web.Controllers
 {
@@ -10,11 +11,13 @@ namespace GShopping.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CartController(IProductService productService, ICartService cartService)
+        public CartController(IProductService productService, ICartService cartService, IWebHostEnvironment hostingEnvironment)
         {
             _productService = productService;
             _cartService = cartService;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         [Authorize]
@@ -79,6 +82,27 @@ namespace GShopping.Web.Controllers
                 }
             }
             return response;
+        }
+
+        [HttpGet]
+        public JsonResult AutoComplete(string prefix)
+        {
+            var rootPath = _hostingEnvironment.ContentRootPath;
+
+            var fileContent = System.IO.File.ReadAllText(rootPath + "/_cidades.json");
+
+            var estadosView = JsonSerializer.Deserialize<EstadosView>(fileContent,
+                            new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            });
+
+            List<string>? cidades = estadosView?.Estados.SelectMany(x =>
+            {
+                return x.Cidades.Select(c => c + " - " + x.Sigla).ToList();
+            }).ToList();
+
+            return Json(cidades);
         }
     }
 }

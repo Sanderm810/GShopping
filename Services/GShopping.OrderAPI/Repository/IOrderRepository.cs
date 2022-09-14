@@ -9,7 +9,7 @@ namespace GShopping.OrderAPI.Repository
         Task UpdateOrderPaymentStatus (long orderHeaderId, bool paid);
         Task<IEnumerable<OrderViewModel>> FindAllOrders();
         Task<OrderViewModel> FindOrderById(long id);
-        Task<OrderHeader> UpdateOrder(OrderHeader model);
+        Task<OrderViewModel> UpdateOrder(OrderViewModel model);
         Task UpdateOrderStatus (long orderHeaderId, string status);
         Task<OrderHeader> SendEmail(OrderHeader model);
         Task<bool> DeleteOrderById(long id);

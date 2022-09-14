@@ -30,9 +30,13 @@ namespace GShopping.Web.Services
             return await respose.ReadContentAs<OrderViewModel>();
         }
 
-        public Task<OrderViewModel> UpdateOrder(OrderViewModel model, string? token)
+        public async Task<OrderViewModel> UpdateOrder(OrderViewModel model, string? token)
         {
-            throw new NotImplementedException();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var respose = await _client.PutAsJson($"{BasePath}/Update", model);
+            if (respose.IsSuccessStatusCode)
+                return await respose.ReadContentAs<OrderViewModel>();
+            else throw new Exception("Something went wrong when calling API");
         }
 
         public Task<OrderViewModel> SendEmail(OrderViewModel model, string? token)
@@ -40,9 +44,13 @@ namespace GShopping.Web.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteOrderById(long id, string? token)
+        public async Task<bool> DeleteOrderById(long id, string? token)
         {
-            throw new NotImplementedException();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var respose = await _client.DeleteAsync($"{BasePath}/Delete/{id}");
+            if (respose.IsSuccessStatusCode)
+                return await respose.ReadContentAs<bool>();
+            else throw new Exception("Something went wrong when calling API");
         }
 
         public Task<OrderViewModel> UpdateStatus(long id, string status, string? token)

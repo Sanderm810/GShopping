@@ -44,7 +44,7 @@ namespace GShopping.Web.Controllers
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             var model = await _productService.FindProductById(id, token);
-            if(model != null) return View(model);
+            if (model != null) return View(model);
             return NotFound();
         }
 

@@ -32,8 +32,7 @@ namespace GShopping.OrderAPI.Model
         [StringLength(50)]
         public string CategoryName { get; set; }
 
-        [Column("image_url")]
-        [StringLength(300)]
+        [Column("image_url", TypeName = "longtext")]
         public string ImageUrl { get; set; }
 
         public static explicit operator OrderProduct(ProductVO v)

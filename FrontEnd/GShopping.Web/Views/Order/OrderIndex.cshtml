@@ -56,7 +56,7 @@
                         @item.CartHeader.FirstName @item.CartHeader.LastName
                     </td>
                     <td>
-                        @item.CartHeader.FormatPhone()
+                        @item.CartHeader.Phone
                     </td>
                     <td>
                         @item.CartHeader.Email
@@ -68,7 +68,7 @@
                         @((item.CartHeader.PurchaseAmount).ToString("c"))
                     </td>
                     <td>
-                        @item.CartHeader.Status
+                        @item.CartHeader.DisplayStatusName()
                     </td>
                     <td style="text-align: end;">
                         <a asp-action="OrderUpdate" class="btn btn-success" asp-route-id="@item.CartHeader.Id">

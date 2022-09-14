@@ -1,4 +1,5 @@
 ﻿using GShopping.MessageBus;
+using GShopping.OrderAPI.Model.Enum;
 
 namespace GShopping.OrderAPI.Messages
 {
@@ -10,7 +11,7 @@ namespace GShopping.OrderAPI.Messages
 
         public decimal? DiscountAmount { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         public DateTime DateTime { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
@@ -19,7 +20,8 @@ namespace GShopping.OrderAPI.Messages
         public string? ExpiryMothYear { get; set; }
         public int? CartTotalItems { get; set; }
         public IEnumerable<CartDetailVO>? CartDetails { get; set; }
-
-        public string? Status { get; set; } = "Processando";
+        public string FullAddress { get; set; }
+        public StatusPedido Status { get; set; }
+        public string? Observation { get; set; }
     }
 }

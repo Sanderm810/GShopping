@@ -1,4 +1,5 @@
 ﻿using GShopping.OrderAPI.Model.Base;
+using GShopping.OrderAPI.Model.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GShopping.OrderAPI.Model
@@ -23,7 +24,7 @@ namespace GShopping.OrderAPI.Model
         public string FirstName { get; set; }
 
         [Column("last_name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Column("purchase_date")]
         public DateTime DateTime { get; set; } 
@@ -54,7 +55,13 @@ namespace GShopping.OrderAPI.Model
         [Column("payment_status")]
         public bool? PaymentStatus { get; set; }
 
+        [Column("full_address")]
+        public string FullAddress { get; set; }
+
         [Column("status")]
-        public string? Status { get; set; }
+        public StatusPedido Status { get; set; }
+
+        [Column("observation")]
+        public string? Observation { get; set; }
     }
 }

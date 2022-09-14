@@ -17,7 +17,7 @@
     string getIdItem(long id) => $"item-{id}";
 }
 
-<form asp-action="OrderUpdate">
+<form asp-action="OrderDelete">
     <input asp-for="CartHeader.Id" hidden />
     <input asp-for="CartHeader.Count" hidden />
     <input asp-for="CartHeader.CouponCode" hidden />
@@ -31,66 +31,48 @@
 
     <br/>
     <div class="container border p-3">
-        <div class="row pb-2">
-            <div class="col">
-                <h1 class="text-primary">Editar Pedido</h1>
-            </div>
-            <div class="col text-end pt-1">
-                <i class="fa fa-calendar"></i> &nbsp; 
-                @Model.CartHeader.DateFomart()
-            </div>
-        </div>
+        <h1 class="text-primary">Deletar Pedido</h1>
+        
         <hr/>
         <div class="row">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+             <div class="col-2">
+                <label asp-for="CartHeader.DateTime" class="control-label pt-2" style="font-size:20px;">Emissão</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input value="@Model.CartHeader.DateFomart()" readonly class="form-control"/>
+            </div>
             <div class="col-2">
                 <label asp-for="CartHeader.FirstName" class="control-label pt-2" style="font-size:20px;">Nome</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="CartHeader.FirstName" class="form-control"/>
-                <span asp-validation-for="CartHeader.FirstName" class="text-danger"/>
+                <input asp-for="CartHeader.FirstName" class="form-control" readonly/>
             </div>
-            @*<div class="col-2">
+            <div class="col-2">
                 <label asp-for="CartHeader.LastName" class="control-label pt-2" style="font-size:20px;">Sobrenome</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="CartHeader.LastName" class="form-control" />
-                <span asp-validation-for="CartHeader.LastName" class="text-danger"></span>
-            </div>*@
+                <input asp-for="CartHeader.LastName" class="form-control" readonly/>
+            </div>
             <div class="col-2">
                 <label asp-for="CartHeader.Phone" class="control-label pt-2" style="font-size:20px;">Telefone</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="CartHeader.Phone" class="form-control" rows="5"></input>
-                <span asp-validation-for="CartHeader.Phone" class="text-danger"></span>
+                <input asp-for="CartHeader.Phone" class="form-control" rows="5" readonly/>
             </div>
             <div class="col-2">
                 <label asp-for="CartHeader.Email" class="control-label pt-2" style="font-size:20px;">Email</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="CartHeader.Email" class="form-control" />
-                <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
-            </div>
-            <div class="col-2">
-                <label asp-for="CartHeader.FullAddress" class="control-label pt-2" style="font-size:20px;">Endereço</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="CartHeader.FullAddress" class="form-control"/>
+                <input asp-for="CartHeader.Email" class="form-control" readonly/>
             </div>
             <div class="col-2">
                 <label asp-for="CartHeader.Status" class="control-label pt-2" style="font-size:20px;">Status</label>
             </div>
             <div class="col-10 pb-3">
-                <select class="form-select" class="" asp-for="@Model.CartHeader.Status" asp-items="Html.GetEnumSelectList<StatusPedido>()"></select>
+                <select class="form-select" asp-for="@Model.CartHeader.Status" asp-items="Html.GetEnumSelectList<StatusPedido>()" readonly></select>
                 @*<input asp-for="CartHeader.Status" class="form-control" />
                 <span asp-validation-for="CartHeader.Status" class="text-danger"></span>*@
-            </div>
-            <div class="col-2">
-                <label asp-for="CartHeader.Observation" class="control-label pt-2" style="font-size:20px;">Observação</label>
-            </div>
-            <div class="col-10 pb-3">
-                <textarea asp-for="CartHeader.Observation" class="form-control" rows="2"></textarea>
             </div>
 
             <div class="col-12 pb-3">
@@ -144,8 +126,7 @@
                                                 <span style="font-size:17px;">@string.Format("{0:c}", @Model.CartDetails[i].Product.Price)</span>
                                             </div>
                                             <div class="col-3">
-                                                <input type="number" asp-for="@Model.CartDetails[i].Count" class="form-control" />
-                                                <span asp-validation-for="@Model.CartDetails[i].Count" class="text-danger"></span>
+                                                <input type="number" asp-for="@Model.CartDetails[i].Count" class="form-control" readonly/>
                                             </div>
                                         </div>
                                         <hr/>
@@ -170,19 +151,8 @@
             </div>
 
             <div class="col-6">
-                <input type="submit" value="Editar" class="btn btn-success form-control" />
+                <input type="submit" value="Deletar" class="btn btn-danger form-control" />
             </div>
         </div>
     </div>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
-
-    <script>
-        $(function () {
-            $("#CartHeader_Phone").mask("(99) 999999999");
-        });
-    </script>
-}

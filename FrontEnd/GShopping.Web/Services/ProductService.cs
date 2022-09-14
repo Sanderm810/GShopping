@@ -33,7 +33,7 @@ namespace GShopping.Web.Services
         public async Task<ProductViewModel> CreateProduct(ProductViewModel model, string? token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var respose = await _client.PostAsJson(BasePath, model);
+            var respose = await _client.PostAsJson(BasePath, await PrepareImageToModelAsync(model));
             if (respose.IsSuccessStatusCode)
                 return await respose.ReadContentAs<ProductViewModel>();
             else throw new Exception("Something went wrong when calling API");
@@ -42,7 +42,7 @@ namespace GShopping.Web.Services
         public async Task<ProductViewModel> UpdateProduct(ProductViewModel model, string? token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var respose = await _client.PutAsJson(BasePath, model);
+            var respose = await _client.PutAsJson(BasePath, await PrepareImageToModelAsync(model));
             if (respose.IsSuccessStatusCode)
                 return await respose.ReadContentAs<ProductViewModel>();
             else throw new Exception("Something went wrong when calling API");
@@ -55,6 +55,20 @@ namespace GShopping.Web.Services
             if (respose.IsSuccessStatusCode)
                 return await respose.ReadContentAs<bool>();
             else throw new Exception("Something went wrong when calling API");
+        }
+
+        private static async Task<ProductViewModel> PrepareImageToModelAsync(ProductViewModel model)
+        {
+            if(model.FormFile != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.FormFile.CopyToAsync(memoryStream);
+                    model.ImageUrl = @$"data:{model.FormFile.ContentType};base64,{Convert.ToBase64String(ImageHelper.CreateThumbnail(memoryStream.ToArray()))}";
+                    return model;
+                }
+            }
+            return model;
         }
 
     }

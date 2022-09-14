@@ -35,6 +35,8 @@ namespace GShopping.Web.Services
                 Id = model.CartHeader.Id,
                 PurchaseAmount = model.CartHeader.PurchaseAmount,
                 UserId = model.CartHeader.UserId,
+                FullAddress = model.CartHeader.FullAddress,
+                Observation = model.CartHeader.Observation,
                 CartDetails = model.CartDetails.Select(item =>
                 {
                     return new CartDetailVO
@@ -48,7 +50,7 @@ namespace GShopping.Web.Services
                             Id = item.Product.Id,
                             ImageUrl = item.Product.ImageUrl,
                             Name = item.Product.Name,
-                            Price = item.Product.Price
+                            Price = (decimal)item.Product.Price
                         }
                     };
                 })

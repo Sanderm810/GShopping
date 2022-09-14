@@ -17,32 +17,34 @@
                 <div class="col-7">
                     <div class="row">
                         <div class="col-12">
-                            <label class="col-form-label">First Name:</label>
+                            <label class="col-form-label">Nome:</label>
                             <input asp-for="CartHeader.FirstName" class="form-control"/>
+                            <span asp-validation-for="CartHeader.FirstName" class="text-danger"></span>
                         </div>
-                        <div class="col-12">
-                            <label class="col-form-label">Last Name:</label>
+                        @*<div class="col-12">
+                            <label class="col-form-label">Sobrenome:</label>
                             <input asp-for="CartHeader.LastName" class="form-control"/>
-                        </div>
+                            <span asp-validation-for="CartHeader.LastName" class="text-danger"></span>
+                        </div>*@
                         <div class="col-12">
                             <label class="col-form-label">E-mail:</label>
                             <input asp-for="CartHeader.Email" class="form-control"/>
+                            <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label class="col-form-label">Phone Number:</label>
+                            <label class="col-form-label">Telefone:</label>
                             <input asp-for="CartHeader.Phone" class="form-control"/>
+                            <span asp-validation-for="CartHeader.Phone" class="text-danger"></span>
                         </div>
                         <div class="col-12">
-                            <label class="col-form-label">Card Number:</label>
-                            <input asp-for="CartHeader.CardNumber" class="form-control"/>
-                        </div>
-                        <div class="col-12">
-                            <label class="col-form-label">CVV:</label>
-                            <input asp-for="CartHeader.CVV" class="form-control"/>
+                            <label class="col-form-label">Endereço / Bairro / Cidade:</label>
+                            <input asp-for="CartHeader.FullAddress" class="form-control"/>
+                            <span asp-validation-for="CartHeader.FullAddress" class="text-danger"></span>
                         </div>
                         <div class="col-12 pb-4">
-                            <label class="col-form-label">Expiry:</label>
-                            <input asp-for="CartHeader.ExpiryMothYear" placeholder="MMYY" class="form-control"/>
+                            <label class="col-form-label">Observação:</label>
+                            <textarea asp-for="CartHeader.Observation" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="CartHeader.Observation" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -52,13 +54,13 @@
                             <div class="d-none d-lg-block">
                                 <div class="row text-danger">
                                     <div class="col-6">
-                                        Product Details
+                                        Produto
                                     </div>
                                     <div class="col-3">
-                                        Price
+                                        Preço
                                     </div>
                                     <div class="col-3">
-                                        Count
+                                        Quantidade
                                     </div>
                                 </div>
                             </div>
@@ -78,14 +80,12 @@
                                     <span style="font-size:17px;">@item.Count
                                     </span>
                                 </div>
-
-                                
                             </div>
                             <hr/>    
                             }
                             <div class="row">
                                 <div class="col-12 text-right pr-4 text-danger">
-                                Purchase Amount: @string.Format("{0:c}", Model.CartHeader.PurchaseAmount)<br/>
+                                Valor da compra: @string.Format("{0:c}", Model.CartHeader.PurchaseAmount)<br/>
                                 @*@if(Model.CartHeader.DiscountAmount > 0)
                                 {
                                     <span class="text-success">
@@ -99,7 +99,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-success form-control">
-                                        <span>Faça a Encomenda</span>
+                                        <span>Faça a encomenda</span>
                                     </button>
                                 </div>
                             </div>
@@ -109,4 +109,15 @@
             </div>
         </div>
     </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <script>
+        $(function () {
+            $("#CartHeader_Phone").mask("(99) 999999999");
+        });
+    </script>
 }
