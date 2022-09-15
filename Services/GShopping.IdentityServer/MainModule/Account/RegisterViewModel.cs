@@ -16,7 +16,7 @@ namespace GShopping.IdentityServer.MainModule.Account
         public string? Password { get; set; }
 
         public string? ReturnUrl { get; set; }
-        public string? RoleName { get; set; }
+        public string? RoleName { get; set; } 
 
         public bool AllowRememberLogin { get; set; } = true;
         public bool EnableLocalLogin { get; set; } = true;

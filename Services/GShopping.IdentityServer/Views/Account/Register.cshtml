@@ -2,8 +2,8 @@
 
 <div class="login-page">
     <div class="lead">
-        <h1>Register</h1>
-        <p>Choose how to register</p>
+        <h1>Nova Conta</h1>
+        @*<p>Registro de conta local</p>*@
     </div>
      
     <partial name="_ValidationSummary" />
@@ -13,7 +13,7 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
-                    <h2>Local Account Register</h2>
+                    @*<h2>Registro de conta local</h2>*@
                 </div>
 
                 <div class="card-body">
@@ -45,8 +45,8 @@
                             <select asp-for="RoleName" class="form-control"  asp-items="@(new SelectList(ViewBag.message))"></select>
                         </div>
                         <br/>
-                        <button class="btn btn-primary" name="button" value="Register">Register</button>
-                        <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                        <button class="btn btn-primary" name="button" value="Register">Registrar</button>
+                        <button class="btn btn-secondary" name="button" value="cancel">Cancelar</button>
                     </form>
                 </div>
                 <div class="card-footer">
